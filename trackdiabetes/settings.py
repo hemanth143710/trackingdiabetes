@@ -58,7 +58,7 @@ ROOT_URLCONF = 'trackdiabetes.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,3 +132,21 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=14400),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=20),
  }
+
+STATIC_URL = '/static/'
+
+RE_CAPTCHA_SITE_KEY = "6Lc7sr0lAAAAAPAa0vtLWVCy7eIqmTDTNemrDkQr"
+RE_CAPTCHA_SECRET_KEY = "6Lc7sr0lAAAAABv3IK-wm9k-Ww3fcvKDv-X_db13"
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '500/minute',
+        'user': '1000/minute',
+        'loginAttempts': '3/hr',
+
+    }
+}

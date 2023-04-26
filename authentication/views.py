@@ -11,8 +11,18 @@ from django.contrib import auth
 
 from rest_framework.exceptions import ValidationError
 
+
+from rest_framework.generics import CreateAPIView
+from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import Throttled
+# from .serializers import UserCreateSerializer
+
+from .throttle import UserLoginRateThrottle
+
 class RegisterView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
     serializer_class = RegistrationSerializer
+    throttle_classes = (UserLoginRateThrottle,)
 
     def post(self, request, *args, **kwargs):
         try:
@@ -67,6 +77,32 @@ class RegisterView(generics.GenericAPIView):
         user = User.objects.create_user(email=email, username=username, password=password, full_name=full_name, phone_number=phone_number, date_of_birth=date_of_birth)
 
         return Response({'details':'Account Created Successfully.'}, status=status.HTTP_201_CREATED)
+    def throttled(self, request, wait):
+        raise Throttled(detail={
+            "message": "recaptcha_required",
+        })
+    
+from django.shortcuts import render
+from django.conf import settings
+
+def demo_recaptcha(request):
+    return render(request, 'demo_recaptcha.html', {
+        "key": settings.RE_CAPTCHA_SITE_KEY
+    })
+
+# class RegisterUserAPIView(CreateAPIView):
+
+#     permission_classes = [AllowAny]
+#     serializer_class = UserCreateSerializer
+#     throttle_classes = (UserLoginRateThrottle,)
+
+#     def perform_create(self, serializer):
+#         user = serializer.save()
+
+#     def throttled(self, request, wait):
+#         raise Throttled(detail={
+#             "message": "recaptcha_required",
+#         })
 
 # Create your views here.
 # class RegisterView(generics.GenericAPIView):

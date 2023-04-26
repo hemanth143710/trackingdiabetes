@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from rest_framework.throttling import SimpleRateThrottle
-
-from account.utils.helpers import verify_recaptcha
+from authentication.models import User
+from authentication.utils import verify_recaptcha
 
 class UserLoginRateThrottle(SimpleRateThrottle):
     scope = 'loginAttempts'

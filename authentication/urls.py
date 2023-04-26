@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import (
 urlpatterns = [
     path('register/',RegisterView.as_view(), name = "register" ), #registration url
     path('login/',LoginAPIView.as_view(), name = "login" ), #login url
+    path('demo-recaptcha/', demo_recaptcha, name="demo"),
     # path('email-verify/',VerifyEmail.as_view(), name = "verifyemail" ), 
     # path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'), #refresh token url 
     # path('resend-verification-email/', ResendEmailVerification.as_view(), name='resend-verification-email'),
