@@ -1,159 +1,99 @@
-<!-- <!DOCTYPE html>
+
+<!DOCTYPE html>
 <html>
+
 <head>
-  <title>Sugar Log Form</title>
+    <title>Sugar Log Form</title>
 </head>
+
 <body>
 
-  <h1>Sugar Log Form</h1>
-
-  <form id="sugarForm">
-    <label for="date">Date:</label>
-    <input type="date" id="date" name="date"><br><br>
-
-    <label for="amTime">AM Time:</label>
-    <input type="time" id="amTime" name="amTime"><br><br>
-
-    <label for="amLevel">AM Level:</label>
-    <input type="number" id="amLevel" name="amLevel"><br><br>
-
-    <label for="breakfastMenu">Breakfast Menu:</label>
-    <input type="text" id="breakfastMenu" name="breakfastMenu"><br><br>
-
-    <label for="breakfastTime">Breakfast Time:</label>
-    <input type="time" id="breakfastTime" name="breakfastTime"><br><br>
-
-    <label for="lunchMenu">Lunch Menu:</label>
-    <input type="text" id="lunchMenu" name="lunchMenu"><br><br>
-
-    <label for="lunchTime">Lunch Time:</label>
-    <input type="time" id="lunchTime" name="lunchTime"><br><br>
-
-    <label for="dinnerMenu">Dinner Menu:</label>
-    <input type="text" id="dinnerMenu" name="dinnerMenu"><br><br>
-
-    <label for="dinnerTime">Dinner Time:</label>
-    <input type="time" id="dinnerTime" name="dinnerTime"><br><br>
-
-    <label for="pmTime">PM Time:</label>
-    <input type="time" id="pmTime" name="pmTime"><br><br>
-
-    <label for="pmLevel">PM Level:</label>
-    <input type="number" id="pmLevel" name="pmLevel"><br><br>
-
-    <button type="submit" onclick="adddata()">Submit</button>
-  </form>
-
-  <script>
-    const sugarForm = document.getElementById('sugarForm');
-
-    sugarForm.addEventListener('submit', (e) => {
-      e.preventDefault(); // prevent default form submission
-
-      const data = {
-        date: document.getElementById('date').value,
-        blood_sugar_am_time: document.getElementById('amTime').value,
-        blood_sugar_am_level: document.getElementById('amLevel').value,
-        breakfast_menu: document.getElementById('breakfastMenu').value,
-        breakfast_time: document.getElementById('breakfastTime').value,
-        lunch_menu: document.getElementById('lunchMenu').value,
-        lunch_time: document.getElementById('lunchTime').value,
-        dinner_menu: document.getElementById('dinnerMenu').value,
-        dinner_time: document.getElementById('dinnerTime').value,
-        blood_sugar_pm_time: document.getElementById('pmTime').value,
-        blood_sugar_pm_level: document.getElementById('pmLevel').value,
-      };
-      console.log(data)
-
-      fetch('http://127.0.0.1:8000/data/sugarlog/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        //   'Authorization': 'Token your_token_here'
-        },
-        body: JSON.stringify(data)
-      })
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.error(error));
-    });
-  -->
-  <!DOCTYPE html>
-  <html>
-  <head>
-    <title>Sugar Log Form</title>
-  </head>
-  <body>
-  
     <h1>Sugar Log Form</h1>
-  
+
     <form id="sugarForm">
-      <label for="date">Date:</label>
-      <input type="date" id="date" name="date"><br><br>
-  
-      <label for="amTime">AM Time:</label>
-      <input type="time" id="amTime" name="amTime"><br><br>
-  
-      <label for="amLevel">AM Level:</label>
-      <input type="number" id="amLevel" name="amLevel"><br><br>
-  
-      <label for="breakfastMenu">Breakfast Menu:</label>
-      <input type="text" id="breakfastMenu" name="breakfastMenu"><br><br>
-  
-      <label for="breakfastTime">Breakfast Time:</label>
-      <input type="time" id="breakfastTime" name="breakfastTime"><br><br>
-  
-      <label for="lunchMenu">Lunch Menu:</label>
-      <input type="text" id="lunchMenu" name="lunchMenu"><br><br>
-  
-      <label for="lunchTime">Lunch Time:</label>
-      <input type="time" id="lunchTime" name="lunchTime"><br><br>
-  
-      <label for="dinnerMenu">Dinner Menu:</label>
-      <input type="text" id="dinnerMenu" name="dinnerMenu"><br><br>
-  
-      <label for="dinnerTime">Dinner Time:</label>
-      <input type="time" id="dinnerTime" name="dinnerTime"><br><br>
-  
-      <label for="pmTime">PM Time:</label>
-      <input type="time" id="pmTime" name="pmTime"><br><br>
-  
-      <label for="pmLevel">PM Level:</label>
-      <input type="number" id="pmLevel" name="pmLevel"><br><br>
-  
-      <button type="submit" onclick="submitForm()">Submit</button>
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date"><br><br>
+
+        <label for="amTime">AM Time:</label>
+        <input type="time" id="amTime" name="amTime"><br><br>
+
+        <label for="amLevel">AM Level:</label>
+        <input type="number" id="amLevel" name="amLevel"><br><br>
+
+        <label for="breakfastMenu">Breakfast Menu:</label>
+        <input type="text" id="breakfastMenu" name="breakfastMenu"><br><br>
+
+        <label for="breakfastTime">Breakfast Time:</label>
+        <input type="time" id="breakfastTime" name="breakfastTime"><br><br>
+
+        <label for="lunchMenu">Lunch Menu:</label>
+        <input type="text" id="lunchMenu" name="lunchMenu"><br><br>
+
+        <label for="lunchTime">Lunch Time:</label>
+        <input type="time" id="lunchTime" name="lunchTime"><br><br>
+
+        <label for="dinnerMenu">Dinner Menu:</label>
+        <input type="text" id="dinnerMenu" name="dinnerMenu"><br><br>
+
+        <label for="dinnerTime">Dinner Time:</label>
+        <input type="time" id="dinnerTime" name="dinnerTime"><br><br>
+
+        <label for="pmTime">PM Time:</label>
+        <input type="time" id="pmTime" name="pmTime"><br><br>
+
+        <label for="pmLevel">PM Level:</label>
+        <input type="number" id="pmLevel" name="pmLevel"><br><br>
+
+        <button type="submit" onclick="submitForm()">Submit</button>
     </form>
-  
+
     <script>
-      function submitForm() {
-        const data = {
-          date: document.getElementById('date').value,
-          blood_sugar_am_time: document.getElementById('amTime').value,
-          blood_sugar_am_level: document.getElementById('amLevel').value,
-          breakfast_menu: document.getElementById('breakfastMenu').value,
-          breakfast_time: document.getElementById('breakfastTime').value,
-          lunch_menu: document.getElementById('lunchMenu').value,
-          lunch_time: document.getElementById('lunchTime').value,
-          dinner_menu: document.getElementById('dinnerMenu').value,
-          dinner_time: document.getElementById('dinnerTime').value,
-          blood_sugar_pm_time: document.getElementById('pmTime').value,
-          blood_sugar_pm_level: document.getElementById('pmLevel').value,
+        function submitForm() {
+            const data = {
+                date: document.getElementById('date').value,
+                blood_sugar_am_time: document.getElementById('amTime').value,
+                blood_sugar_am_level: document.getElementById('amLevel').value,
+                breakfast_menu: document.getElementById('breakfastMenu').value,
+                breakfast_time: document.getElementById('breakfastTime').value,
+                lunch_menu: document.getElementById('lunchMenu').value,
+                lunch_time: document.getElementById('lunchTime').value,
+                dinner_menu: document.getElementById('dinnerMenu').value,
+                dinner_time: document.getElementById('dinnerTime').value,
+                blood_sugar_pm_time: document.getElementById('pmTime').value,
+                blood_sugar_pm_level: document.getElementById('pmLevel').value,
+            };
+            console.log(JSON.stringify(data))
+        fetch("http://127.0.0.1:8000/data/sugarlog/", {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+              "Content-type": "application/json; charset=UTF-8",
+            },
+          })
+            .then((response) => {
+              if (!response.ok) {
+                throw new Error("Network response was not ok");
+              }
+              return response.json();
+            })
+            .then((json) => {
+              // Store the response in a cookie
+              //console.log(json.token)
+        
+             
+              console.log(json);
+              //document.cookie = `access_token=${json.token}; path=/`;
+              //document.cookie = `session=${JSON.stringify(json)}; path=/`;
+              //console.log(`Cookie set: session=${JSON.stringify(json)}; path=/`);
+      
+              console.log(json);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
         };
-        console.log(data)
-  
-        fetch('http://127.0.0.1:8000/data/sugarlog/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          //   'Authorization': 'Token your_token_here'
-          },
-          body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error(error));
-      }
+      
     </script>
-  </body>
-  </html>
-  
+</body>
+
+</html>
