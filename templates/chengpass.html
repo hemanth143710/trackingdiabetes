@@ -1,0 +1,119 @@
+<html>
+<head>
+	<title>Change Password</title>
+	<style>
+		body {
+			font-family: "Poppins", sans-serif;
+			background-color: #041858;
+		}
+		form {
+			background-color: #fff;
+			padding: 20px;
+			max-width: 550px;
+			margin: 55px auto;
+			border-radius: 5px;
+			box-shadow: #041858;
+		}
+		label, input {
+			display: block;
+			margin-bottom: 10px;
+		}
+		input[type="password"] {
+			padding: 10px;
+			border-radius: 5px;
+			border: none;
+      width:550px;
+			background-color:#e9e9e9;
+		}
+		input[type="submit"] {
+			background-color: #e0cd61;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+		input[type="submit"]:hover {
+			background-color:#e0cd61;
+		}
+  
+		.error-message {
+			color: red;
+			font-size: 15px;
+			margin-top: 5px;
+		}
+    .forgot {
+      margin-left:350px;
+      margin-top:-30px;
+	  color:#041858;
+    }
+	</style>
+</head>
+<body> 
+	<form id="change-password-form" style="margin-top:300px;">
+    <h1 style="color: #041858;margin-top:-10px;"><center>Change Password<center></h2>
+		<label for="current_password">Current Password</label>
+		<input type="password" id="current_password" name="current_password" required>
+		<label for="password">New Password</label>
+		<input type="password" id="password" name="password" required>
+		<label for="password2">Confirm New Password</label>
+		<input type="password" id="password2" name="password2" required>
+		<input type="submit" value="Change Password" style="margin-top:20px;">
+    <h4 class="forgot"><a href="ForgotpassEmail.html" style="text-decoration: none;color:#041858;">Forgot your password?</a></h4>
+		<div id="error-message" class="error-message"></div>
+	</form>
+
+		<script>
+		const form = document.querySelector('#change-password-form');
+		const errorMessage = document.querySelector('#error-message');
+		const successMessage = document.querySelector('#success-message');
+
+		form.addEventListener('submit', (event) => {
+			event.preventDefault();
+
+			const currentPassword = form.current_password.value;
+			const newPassword = form.password.value;
+			const confirmPassword = form.password2.value;
+      const token = localStorage.getItem('access_token');
+      console.log(confirmPassword)
+      fetch('http://10.10.7.126:200/account/change-password/', {
+        method: 'POST',
+        body: JSON.stringify({
+          current_password: currentPassword,
+          password: newPassword,
+          password2: confirmPassword
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if ('error' in data) {
+            console.log(data)
+            if (data.error.password2 === 'Ensure this field has at least 6 characters.') {
+              errorMessage.innerHTML = 'ENSURE THIS FIELD HAS AT LEAST 6 CHARACTERS';
+            } else if (data.error.current_password === 'Current password is incorrect') {
+              errorMessage.innerHTML = 'CURRENT PASSWORD IS INCORRECT';
+            }else if (data.error.non_field_errors === 'Passwords do not match') {
+              errorMessage.innerHTML = 'PASSWORD DO NOT MATCH';
+            }  
+            else {
+              errorMessage.innerHTML = 'An error occurred. Please try again later.';
+            }
+          } else {
+            errorMessage.innerHTML = data.Message;
+            setTimeout(function () {
+            window.location.href = 'account.html';
+            }, 4000);
+          }
+        })
+        .catch(error => {
+          errorMessage.innerHTML = 'An error occurred. Please try again later.';
+          console.error(error);
+        });
+      });
+	</script>
+</body>
+</html>

@@ -79,7 +79,7 @@ class RegisterView(generics.GenericAPIView):
         return Response({'details':'Account Created Successfully.'}, status=status.HTTP_201_CREATED)
     def throttled(self, request, wait):
         raise Throttled(detail={
-            "message": "recaptcha_required",
+            "error": "recaptcha_required",
         })
     
 from django.shortcuts import render
@@ -162,6 +162,8 @@ def demo_recaptcha(request):
     
 class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
+    permission_classes = [AllowAny]
+    throttle_classes = (UserLoginRateThrottle,)
 
     def post(self, request, *args, **kwargs):
         
@@ -191,6 +193,10 @@ class LoginAPIView(generics.GenericAPIView):
             'email': user.email,
             'username': user.username,
             'tokens': user.tokens(),
+        })
+    def throttled(self, request, wait):
+        raise Throttled(detail={
+            "error": "recaptcha_required",
         })
 
     

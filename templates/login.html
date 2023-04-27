@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+     
+  <head>
+          
+    <meta charset="utf-8">
+          
+    <title>Sign In </title>
+          
+    <link rel="stylesheet" href="css/user.css">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+       
+  </head>
+  <style>
+    .registration-message {
+      color: red;
+      margin-top: 20px;
+      margin-left:20px;
+      text-align:center;
+      font-family: "Poppins", sans-serif;
+      
+    }
+    .emailVer{
+      margin-top:20px;
+      text-align:center;
+    }
+    .emailVer a{
+      color: #041858;
+	    text-decoration: none;
+    }
+    .emailVer a:hover{
+      text-decoration: underline;
+    }
+  </style> 
+  <body style="font-family:Poppins, sans-serif;font-weight:400px;">
+          
+    <div class="wrapper" style="margin-top:200px;">
+               
+      <div class="title-text">
+        <div style="display:flex; align-items:center;margin-left:25px;margin-bottom:-10px;">
+          <!-- <img src="images/logo2.png" style="width:80px;height:80px;margin-right:10px;" > -->
+          <div class="title login" style="color:#041858; margin-left:15px;"><b>LOGIN</b> </div>
+        </div>        
+      </div>
+               
+      <div class="form-container">
+        <div class="login">          
+        <div class="form-inner">         
+          <form id="login-form" >      
+
+            <div class="field"> 
+              <i class="fas fa-user-circle"></i>
+            <input type="email" placeholder="Email" id="email" name="email" required>
+            </div>
+                              
+            <div class="field"> 
+              <i class="fa fa-envelope"></i>
+            <input type="password" placeholder="Password" id="password" name="password" required>
+            </div>
+                              
+             <div class="pass-link" style="margin-top:10px;"> 
+            <a href="ForgotpassEmail.html">Forgot password?</a>
+            </div>
+                              
+            <div class="bt">  
+              <button type="submit" onclick="login()" style="font-size:18px;">SUBMIT</button>
+                  
+            </div>
+            <br>
+            <div class="g-recaptcha" data-sitekey="6Lc7sr0lAAAAAPAa0vtLWVCy7eIqmTDTNemrDkQr" data-callback="correctCaptcha"></div>
+
+
+                              
+            <div class="signup-link" style="margin-top:30px;">   
+             Not a member? <a href="register.html">SIGNUP NOW</a> 
+            </div>             
+          </form>
+                      
+        </div>
+      </div>       
+      </div>
+      <!-- <div class="emailVer">   
+        <a href="ResendEmail.html"><b>Resend Verification Email?</b></a> 
+      </div> -->
+      <div id="registration-message" style="text-align:center;color:red; margin-top:20px;"></div>  
+    </div>
+    <section class="container-fluid footer_section" style="margin-top:150px;">
+      <div class="container">
+        <p style="color:#ffffff;">
+          &copy; <span id="displayYear" style="color:#ffffff;"></span> Deduce Technologies - 
+          <a href="index.html" style="color:#ffffff;">All Rights Reserved.</a>
+        </p>
+      </div>
+    </section>
+    <script>
+        var correctCaptcha = function(response) {
+      };
+      function login() {
+        const form = document.getElementById('login-form');
+    
+                form.addEventListener('submit', (event) => {
+                    event.preventDefault(); 
+                    const email = form.elements.email.value;
+                    const password = form.elements.password.value;
+                    const recaptcha = grecaptcha.getResponse();
+                    
+                    fetch('http://127.0.0.1:8000/account/login/', {
+                      method: 'POST',
+                      body: JSON.stringify({
+                 
+                        email:email,
+                        password: password,
+                        recaptcha: recaptcha,
+                      }),
+                      headers: {
+                        'Content-type': 'application/json; charset=UTF-8',
+                      },
+                    })
+                    .then(response => response.json())
+                    .then( data => {
+                      if ('error' in data) {
+                        if (data.error === 'Email or Password is Incorrect, Please Try Again.') {
+                          const errorMessage = document.getElementById('registration-message');
+                          errorMessage.innerHTML = 'EMAIL OR PASSWORD IS INCORRECT, PLEASE TRY AGAIN.';
+
+                        } else if (data.error === 'recaptcha_required') {
+                          const errorMessage = document.getElementById('registration-message');
+                          errorMessage.innerHTML = 'recaptcha_required';
+                        }
+                        else if (data.error === 'Email Address is not Verified, Please Verify your Email Address and Try Again') {
+                          const errorMessage = document.getElementById('registration-message');
+                          errorMessage.innerHTML = 'EMAIL ADDRESS IS NOT VERIFIED, PLEASE VERIFY YOUR EMAIL ADDRESS AND TRY AGAIN!';
+                        }else if (data.error.email === 'Enter a valid email address.') {
+                          const errorMessage = document.getElementById('registration-message');
+                          errorMessage.innerHTML = 'ENTER A VALID EMAIL ADDRESS!';
+
+                        }else {
+                          const errorMessage = document.getElementById('registration-message');
+                          errorMessage.innerHTML = 'An error occurred. Please try again later.';
+                        }
+                      } else {
+                        localStorage.setItem('refresh_token', data.tokens.refresh);
+                        localStorage.setItem('access_token', data.tokens.access);
+                        localStorage.setItem('Geoserver_Token', data.Geoserver_Token);
+                        localStorage.setItem('username',data.username);
+                        sessionStorage.setItem('refresh_token', data.tokens.refresh);
+                        sessionStorage.setItem('access_token', data.tokens.access);
+                        sessionStorage.setItem('Geoserver_Token', data.Geoserver_Token);
+                        sessionStorage.setItem('username', data.username);
+                        window.location.href = 'index.html'; 
+                      }
+                    })
+                    .catch(error => {
+                      const errorMessage = document.getElementById('registration-message');
+                      errorMessage.innerHTML = 'An error occurred. Please try again later.';
+                    });
+                  });
+                }
+   </script>
+  </body>
+</html>

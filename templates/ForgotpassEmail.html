@@ -1,0 +1,107 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+		<title>Forgot Password</title>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+        <link href="css/register.css" rel="stylesheet" type="text/css">
+        
+	</head>
+
+  <style>
+    .error-message {
+      color: red;
+      margin-top: 20px;
+      margin-left:10px;
+      text-align:center;
+      font-family: "Poppins", sans-serif;
+    }
+    .signup-link a{
+      color: #041858;
+	    text-decoration: none;
+    }
+   .signup-link a:hover{
+    text-decoration: underline;
+   }
+  </style>
+	<body style="font-family:Poppins, sans-serif;font-weight:400px;">
+		<div class="login" style="border-radius: 30px; margin-top:280px;">
+      <!-- <div style="display:flex; align-items:center;margin-left:25px;margin-bottom:-30px;">
+        <img src="images/logo2.png" style="width:80px;height:80px;margin-right:10px;" >
+			  <h1 style="color:#041858;margin-left:10px;">REGISTRATION</h1>
+      </div>-->
+      <h1 style="color:#041858;margin-left:10px;top:10px;">RESET YOUR PASSWORD</h1>
+      <h5 style="color:#041858;text-align:center;">Enter your email address below and we'll send you a link to reset your password.</h5>
+      <p id="result"></p>
+            <form id="login-form" name="FormFill" style="margin-top:-20px;">
+                <label for="email">
+					       <i class="fa fa-envelope"></i>
+				        </label>
+              <input type="email" name="email" placeholder="Enter your Email Address" id="email" required >
+
+               <p id="registration-message" class="error-message"></p>
+
+                <button type="submit" style="font-size:18px; width:345px; border-radius:15px; margin-bottom:20px;background-color:#d8bf36;" onclick="ResendEmail()" ><b>SEND LINK</b></button>
+			</form> 
+		</div>
+
+      <div class="container">
+        <p style="color:#ffffff;margin-left:-10px; margin-top:90px;">
+          &copy; <span id="displayYear" style="color:#ffffff;"></span> Deduce Technologies - 
+          <a href="index.html" style="color:#ffffff;">All Rights Reserved.</a>
+        </p>
+      </div>
+   
+    <script>
+      function ResendEmail() {
+        const form = document.getElementById('login-form');
+        const errorMessage = document.getElementById('registration-message');
+      
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+    
+          const email = form.elements.email.value;
+      
+          fetch('http://10.10.7.126:200/account/request-reset-email/', {
+            method: 'POST',
+            body: JSON.stringify({
+              email: email,
+            }),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
+          })
+          .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            if ('error' in data) {
+              // display error message
+              if (data.error === 'The Email Id You have Entered is Incorrect!') {
+                errorMessage.innerHTML = 'THE EMAIL ID YOU HAVE ENTERED IS INCORRECT!';
+              } else {
+                errorMessage.innerHTML = 'An unknown error occurred';
+              }
+            } else {
+              // display success message and redirect to login page
+              if (data.success === 'we have a sent you a link to reset your password!') {
+                errorMessage.innerHTML = 'WE HAVE A SENT YOU A LINK TO RESET YOUR PASSWORD!';
+              } else {
+                errorMessage.innerHTML = data.message;
+              }
+              setTimeout(function() {
+                window.location.href = 'index.html'; // replace with actual login page URL
+              }, 4000); // redirect after 2 seconds (adjust as needed)
+            }
+          })
+          .catch(Error => {
+            //errorMessage.innerHTML = '';
+          });
+          
+        });
+      }
+        </script>
+          </body>
+            </html>

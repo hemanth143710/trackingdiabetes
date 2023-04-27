@@ -41,3 +41,4 @@ class UserLoginRateThrottle(SimpleRateThrottle):
             return self.throttle_failure()
 
         return self.throttle_success()
+    

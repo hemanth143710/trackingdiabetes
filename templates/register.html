@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+  <link href="css/register.css" rel="stylesheet" type="text/css">
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+</head>
+
+<style>
+  .error-message {
+    color: red;
+    margin-top: 20px;
+    margin-left: 10px;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .signup-link a {
+    color: #041858;
+    text-decoration: none;
+  }
+
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<body style="font-family:Poppins, sans-serif;font-weight:400px;">
+  <div class="login" style="border-radius: 35px; margin-top:180px;">
+    <div style="display:flex; align-items:center;margin-left:25px;margin-bottom:-30px;">
+      <img src="images/logo2.jpg" style="width:80px;height:80px;margin-right:10px;">
+      <h1 style="color:#041858;margin-left:10px;">REGISTRATION</h1>
+    </div>
+    <p id="result"></p>
+    <form id="login-form" name="FormFill">
+      <label for="username">
+        <i class="fas fa-user-circle"></i>
+      </label>
+      <input type="text" name="username" placeholder="Username" id="username" required>
+
+      <label for="email">
+        <i class="fa fa-envelope"></i>
+      </label>
+      <input type="email" name="email" placeholder="Email" id="email" required>
+
+      <label for="password">
+        <i class="fa fa-key"></i>
+      </label>
+      <input type="password" name="password" placeholder="password" id="password" required>
+
+      <label for="password2">
+        <i class="fa fa-key"></i>
+      </label>
+      <input type="password" name="password2" placeholder="Re-enter password" id="password2" required>
+
+      <label for="full_name">
+        <i class="fas fa-user-circle"></i>
+      </label>
+      <input type="text" name="full_name" placeholder="full_name" id="full_name" required>
+
+      <label for="phone_number">
+        <i class="fas fa-user-circle"></i>
+      </label>
+      <input type="text" name="phone_number" placeholder="phone_number" id="phone_number" required>
+
+      <label for="date_of_birth">
+        <i class="fas fa-user-circle"></i>
+      </label>
+      <input type="date" name="date_of_birth" placeholder="date_of_birth" id="date_of_birth" required>
+
+      <div class="g-recaptcha" data-sitekey="6Lc7sr0lAAAAAPAa0vtLWVCy7eIqmTDTNemrDkQr" data-callback="correctCaptcha">
+      </div>
+
+
+      <div class="signup-link" style="margin-left:23px;">
+        Already have an account? <a href="login.html" style="color:#041858;">SIGN IN</a>
+      </div>
+
+      <p id="registration-message" class="error-message"></p>
+
+      <button type="submit" style="font-size:18px; width:345px; border-radius:10px; margin-bottom:30px;"
+        onclick="registerUser()"><b>SUBMIT</b></button>
+    </form>
+  </div>
+
+  <div class="container">
+    <p style="color:#ffffff;margin-left:-10px;">
+      &copy; <span id="displayYear" style="color:#ffffff;"></span> Deduce Technologies -
+      <a href="index.html" style="color:#ffffff;">All Rights Reserved.</a>
+    </p>
+  </div>
+
+  <script>
+    var correctCaptcha = function (response) {
+    };
+    function registerUser() {
+      const form = document.getElementById('login-form');
+      const errorMessage = document.getElementById('registration-message');
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const username = form.elements.username.value;
+        const email = form.elements.email.value;
+        const password = form.elements.password.value;
+        const password2 = form.elements.password2.value;
+        const full_name = form.elements.full_name.value;
+        const phone_number = form.elements.phone_number.value;
+        const date_of_birth = form.elements.date_of_birth.value;
+        const recaptcha = grecaptcha.getResponse();
+        console.log('jjjjj', recaptcha)
+
+        fetch('http://127.0.0.1:8000/account/register/', {
+          method: 'POST',
+          body: JSON.stringify({
+            username: username,
+            email: email,
+            password: password,
+            password2: password2,
+            full_name: full_name,
+            phone_number: phone_number,
+            date_of_birth: date_of_birth,
+            recaptcha: recaptcha,
+
+          }),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        })
+        .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            if ('error' in data) {
+              // display error message
+              if (data.error ) {
+                errorMessage.innerHTML = data.error;
+              } else if (data.error === 'User with this email already exists.') {
+                errorMessage.innerHTML = 'EMAIL ID ALREADY EXISTS!';
+              } else if (data.error === 'Username must be at least 3 characters') {
+                errorMessage.innerHTML = 'USERNAME MUST BE AT LEAST 3 CHARACTERS!';
+              } else if (data.error === 'Username cannot start with a number') {
+                errorMessage.innerHTML = 'USERNAME CANNOT START WITH A NUMBER';
+              } else if (data.error === 'Passwords length must be greater than 6 characters') {
+                errorMessage.innerHTML = 'PASSWORD LENGTH MUST BE MORE THAN 6 CHARACTERS!';
+              } else if (data.error === 'Passwords do not match') {
+                errorMessage.innerHTML = 'PASSWORDS DO NOT MATCH!';
+              } else if (data.error === 'Username must be less than 12 characters') {
+                errorMessage.innerHTML = 'USERNAME MUST BE LESS THAN 12 CHARACTERS!';  
+              } else if(data.error === 'Enter a valid email address.'){
+                errorMessage.innerHTML = 'ENTER A VALID EMAIL ADDRESS.';
+              }else if(data.error === 'Username cannot contain spaces'){
+                errorMessage.innerHTML = 'USERNAME CANNOT CONTAIN SPACES';
+              }else if(data.error === 'Password cannot contain spaces'){
+                errorMessage.innerHTML = 'PASSWORD CANNOT CONTAIN SPACES';
+              }else if(data.error === 'Enter a valid email address.'){
+                errorMessage.innerHTML = 'ENTER A VALID EMAIL ADDRESS';
+              }else if(data.error === 'This field may not be blank.'){
+                errorMessage.innerHTML = 'THIS FIELD MAY NOT BE BLANK';
+              }else if(data.error === 'User registration failed.'){
+                errorMessage.innerHTML = 'USER REGISTRATION FAILED';
+              }
+              else{
+                errorMessage.innerHTML = 'An unknown error occurred';
+              }
+            } else {
+              // display success message and redirect to login page
+              errorMessage.innerHTML = data.success + ' ' + data.message;
+              //errorMessage.innerHTML = data.message;
+              // setTimeout(function(){
+              //   window.location.href = "login.html"; // replace with actual login page URL
+              // }, 10000); // redirect after 2 seconds (adjust as needed)
+            }
+          })
+          .catch(error => {
+            //errorMessage.innerHTML = '';
+          });
+        });
+      }
+        </script>
+          </body>
+            </html>
+
+
+
+<!--         
+            <html>
+              <head>
+                <title>reCAPTCHA demo: Simple page</title>
+                <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+              </head>
+              <body>
+                <form method="post">
+                  {% csrf_token %}
+                  <label for="username">Username:</label>
+                  <input type="text" id="username" name="username"><br><br>
+            
+                  <label for="password">Password:</label>
+                  <input type="password" id="password" name="password"><br><br>
+            
+                  <label for="password2">Confirm Password:</label>
+                  <input type="password" id="password2" name="password2"><br><br>
+            
+                  <label for="email">Email:</label>
+                  <input type="email" id="email" name="email"><br><br>
+            
+                  <label for="full_name">Full Name:</label>
+                  <input type="text" id="full_name" name="full_name"><br><br>
+            
+                  <label for="phone_number">Phone Number:</label>
+                  <input type="text" id="phone_number" name="phone_number"><br><br>
+            
+                  <label for="date_of_birth">Date of Birth:</label>
+                  <input type="date" id="date_of_birth" name="date_of_birth"><br><br>
+            
+                  <div class="g-recaptcha" data-sitekey="{{6Lc7sr0lAAAAAPAa0vtLWVCy7eIqmTDTNemrDkQr}}" data-callback="correctCaptcha"></div>
+                  <div class="g-recaptcha" data-sitekey="6Lc7sr0lAAAAAPAa0vtLWVCy7eIqmTDTNemrDkQr" data-callback="correctCaptcha"></div>
+                  <button type="submit">Register</button>
+                </form>
+            
+                <script>
+                  var correctCaptcha = function(response) {
+                    console.log(response);
+                  };
+                </script>
+              </body>
+            </html> -->

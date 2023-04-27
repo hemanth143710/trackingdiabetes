@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Deduce Map</title>
+  <!-- slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css" />
+
+  <!-- bootstrap core css -->
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+
+  <!-- fonts style -->
+  <link href="https://fonts.googleapis.com/css?family=Poppins:400,600,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Custom styles for this template -->
+  <link href="css/style.css" rel="stylesheet" />
+  <!-- responsive style -->
+  <link href="css/responsive.css" rel="stylesheet" />
+</head>
+<style>
+  #icon {
+    font-size: 36px;
+    margin-left:-35px;
+    color: #ffffff;
+    margin-top:10px;
+    display: block;
+  }
+  .dropdown-menu {
+    position: absolute;
+    top: 60px;
+    left: -130px;
+    background-color: rgba(255, 255, 255, 0.5); 
+    border: none; /* Remove border */
+    display: none;
+  }
+   .dropdown-menu a {
+    color: black;
+    font-family: "Poppins", sans-serif;
+    padding: 10px 20px; /* Increase padding to create space between links */
+    text-decoration: none;
+    margin-left:20px;
+    border-radius:35px;
+    text-align:center;
+    display: block;
+  }
+  .dropdown-menu a:hover {
+    color: white; 
+    background-color:#d8bf36;
+  }
+</style>
+<body>
+
+  <div class="hero_area">
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="index.html">
+            <span style="margin-left:90px;"><b>
+              Track Diabetes data
+            </span></b>
+          </a>
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="s-1"> </span>
+            <span class="s-2"> </span>
+            <span class="s-3"> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
+              <ul class="navbar-nav">
+                <!--  <li class="nav-item active">
+                  <a class="nav-link" id="homeLink" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>-->
+                <li class="nav-item active">
+                  <a class="nav-link" id="dashlink"  href="sugardata.html"> Sugar Data Log </a>
+              
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="aboutLink" href="addingsugardata.html"> Add Log Data </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="apiLink">  </a>
+                </li>
+               <!--  <li class="nav-item">
+                  <a class="nav-link" href="#contactLink">Contact Us</a>
+                </li>
+                <li class="nav-item dropdown active ">
+                  <a class="nav-link dropdown-toggle" href="#" id="productsLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Products
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="productsLink">
+                    <a class="dropdown-item" href="index.html">View Layer API</a>
+                    <a class="dropdown-item" href="index.html">Layers API</a>
+                    <a class="dropdown-item" href="index.html">Developers</a>
+                  </div>
+                </li>
+                
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="productsLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Documentation
+                  </a>
+                  <div class="dropdown-menu" aria-labelledby="productsLink">
+                    <a class="dropdown-item" href="">View Layer API</a>
+                    <a class="dropdown-item" href="#">Layers API</a>
+                    <a class="dropdown-item" href="#">Developers</a>
+                  </div>
+                </li>-->
+              </ul>
+            </div>
+            <div class="quote_btn-container">
+               <!--  <b>
+              <p id="welcome" style="color:#d8bf36;margin-top:10px;"> Hello, <span id="user-email" style="display:none;">! </span></p>
+                 </b>-->
+              <a href="register.html"><img src="images/signin.png" id="loginLink" style="width:50px;height:50px;margin-right:-55px;margin-top:5px;"> 
+              </a> 
+
+              <img src="images/signin.png" id="account" style="width:50px;height:50px;margin-top:15px;margin-right:23px;">
+                <!--  <h5 style="font-family:sans-serif;margin-bottom:20px;">Login</h5> -->
+              <div class="dropdown">
+                <i class="fa fa-caret-down" id="icon" onclick="showDropdown()" ></i>
+                <div id="dropdown-menu" class="dropdown-menu">
+              <b>
+                <p id="welcome" style="color:#ffffff;margin-top:10px; text-align:center;"><span id="user-email" style="display:none;">! </span></p>
+              </b>
+              <hr style="height:2px;width:140px;border-width:0;background-color:#a5a5a5">
+                  <!-- <a href="account.html">ACCOUNT</a> -->
+                  <a href="" id="logoutLink">LOGOUT</a>
+                </div>
+              </div>
+              <!-- <li class="nav-item">
+                <a class="nav-link" href="" id="emailid" style="width:50px;height:50px;margin-right:-70px;margin-top:5px;" href="#" style="display:none;">Hello welcome</a>
+              </li> -->
+            <!--  <li class="nav-item">
+                <a class="nav-link" href="" id="logoutLink" style="margin-right:-20px; margin-top:-45px;border: 1px solid #0000;
+                border-radius: 250px;
+                background-color:#d8bf36;width:70px;padding:4px; "  href="#" style="display:none;">Logout</a>
+              </li> -->
+            </div>
+            <!-- <div class="container">
+              <h1 id="welcome-msg"></h1>
+              <button id="logout-btn">Logout</button>
+            </div>-->
+
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+    <!-- slider section -->
+
+
+</div>
+
+<!-- end info_section -->
+
+    <!-- footer section -->
+    <!-- footer section -->
+
+ 
+
+ 
+  
+  <script>
+    function showDetails() {
+      // console.log(localStorage.getItem('access_token'))
+      // window.location.href = 'Services.html';
+      if (localStorage.getItem('access_token')) {
+      window.location.href = 'Services.html';
+      } else {
+      window.location.href = 'map.html';
+      }
+    }
+    function showDropdown() {
+      var dropdownMenu = document.getElementById("dropdown-menu");
+      if (dropdownMenu.style.display === "block") {
+        dropdownMenu.style.display = "none";
+      } else {
+        dropdownMenu.style.display = "block";
+      }
+      console.log(dropdownMenu);
+    }
+    
+    function preventBackButton() {
+      history.pushState(null, null, location.href);
+      window.addEventListener('popstate', function () {
+        history.pushState(null, null, location.href);
+      });
+    }
+      // Call preventBackButton function after logout
+    function logout() {
+      // code to logout user
+      preventBackButton();
+    }
+          //const homeLink = document.getElementById('homeLink');
+          const apiLink = document.getElementById('apiLink');
+          const aboutLink = document.getElementById('aboutLink');
+          const logoutLink = document.getElementById('logoutLink');
+          const dashlink = document.getElementById('dashlink');
+          const loginLink = document.getElementById('loginLink');
+          //const welcome = document.getElementById('welcome');
+          const userEmail = localStorage.getItem('username');
+          const account = document.getElementById('account');
+          const icon = document.getElementById('icon');
+          const userEmailElement = document.getElementById('user-email');
+  
+          // Check if there is an access token stored in local storage
+          if (localStorage.getItem('access_token')) {
+              // If there is, show the Home, API, User Greeting, and Logout links and hide the Register and Login links
+              //homeLink.style.display = 'block';
+              apiLink.style.display = 'block';
+              aboutLink.style.display = 'block';
+              loginLink.style.display = 'none';
+              //welcome.style.display = 'block';
+              account.style.display = 'block';
+              dashlink.style.display = 'block';
+              icon.style.display = 'block';
+              userEmailElement.style.display = 'inline-block';
+              logoutLink.style.display = 'block';
+              userEmailElement.textContent = userEmail;
+          } else {
+              // If there is no access token, show the Register, Login, and API links and hide the Home, User Greeting, and Logout links
+             // homeLink.style.display = 'block';
+              apiLink.style.display = 'block';
+             aboutLink.style.display = 'block';
+              loginLink.style.display = 'block';
+              //welcome.style.display = 'none';
+              account.style.display = 'none';
+              dashlink.style.display = 'none';
+              icon.style.display = 'none';
+              userEmailElement.style.display = 'none';
+              logoutLink.style.display = 'none';
+          }
+          logoutLink.addEventListener('click', () => {
+            localStorage.clear();
+            localStorage.removeItem('Geoserver_Token');
+            sessionStorage.removeItem('Geoserver_Token');
+            sessionStorage.clear();
+            window.location.href = 'index.html';
+          });
+
+  </script>
+   <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+   <script type="text/javascript" src="js/bootstrap.js"></script>
+   <script type="text/javascript" src="js/custom.js"></script>
+</body>
+
+</html>

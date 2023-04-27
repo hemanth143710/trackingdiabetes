@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+		<title>RESET YOUR PASSWORD</title>
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+        <link href="css/register.css" rel="stylesheet" type="text/css">
+        
+	</head>
+
+  <style>
+    .error-message {
+      color: red;
+      margin-top: 20px;
+      margin-left:10px;
+      text-align:center;
+      font-family: "Poppins", sans-serif;
+    }
+    .signup-link a{
+      color: #041858;
+	    text-decoration: none;
+    }
+   .signup-link a:hover{
+    text-decoration: underline;
+   }
+  </style>
+	<body style="font-family:Poppins, sans-serif;font-weight:400px;">
+		<div class="login" style="border-radius: 35px; margin-top:180px;">
+			  <h1 style="color:#041858;margin-left:10px;">RESET YOUR PASSWORD</h1>
+ 
+            <form id="login-form" name="FormFill" >
+             
+              <label for="password">
+                  <i class="fa fa-key"></i>
+              </label>
+                  <input type="password" name="password" placeholder="password" id="password" required>
+  
+              <label for="password2" style="margin-left:10px;">
+                  <i class="fa fa-key"></i>
+              </label>
+              <input type="password" name="password2" placeholder="Confirm password" id="password2" required> 
+              
+               <p id="registration-message" class="error-message"></p>
+
+                <button type="submit" style="font-size:18px; width:345px; border-radius:10px; margin-bottom:30px;background-color:#d8bf36;" onclick="registerUser()" ><b>RESET PASSWORD</b></button>
+			      </form> 
+		</div>
+
+      <div class="container">
+        <p style="color:#ffffff;margin-left:-10px;">
+          &copy; <span id="displayYear" style="color:#ffffff;"></span> Deduce Technologies - 
+          <a href="index.html" style="color:#ffffff;">All Rights Reserved.</a>
+        </p>
+      </div>
+   
+    <script>
+      function registerUser() {
+        
+        const errorMessage = document.getElementById('registration-message');
+        const currentUrl = window.location.href; 
+        const urlParams = new URLSearchParams(window.location.search); 
+        const uidb64 = urlParams.get('uidb64'); 
+        const token = urlParams.get('token');
+        const form = document.getElementById('login-form');
+      
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+      
+          //const username = form.elements.username.value;
+          //const email = form.elements.email.value;
+          const password = form.elements.password.value;
+          const password2 = form.elements.password2.value;
+        
+          fetch('http://10.10.7.126:200/account/password-reset/', {
+            method: 'PATCH',
+            body: JSON.stringify({
+
+              password: password,
+              password2: password2,
+              uidb64:uidb64,
+              token:token
+            }),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
+          })
+          .then(response => response.json())
+  .then(data => {
+    if ('error' in data) {
+      if (data.error === 'Password must be at least 7 characters') {
+        errorMessage.innerHTML = 'PASSWORD MUST BE AT LEAST 7 CHARACTERS';
+      } else if (data.error === 'Passwords do not match') {
+        errorMessage.innerHTML = 'PASSWORDS DO NOT MATCH';
+      } else if (data.error === 'The Reset Token is Invalid!') {
+        errorMessage.innerHTML = 'THE RESET TOKEN IS INVALID!';
+      } else {
+        errorMessage.innerHTML = 'An error occurred. Please try again later.';
+      }
+    } else {
+      errorMessage.innerHTML = data.Message;
+      setTimeout(function() {
+        window.location.href = 'login.html';
+      }, 4000);
+    }
+  })
+  .catch(error => {
+    errorMessage.innerHTML = 'An error occurred. Please try again later.';
+  });
+                  });
+                }
+        </script>
+          </body>
+            </html>
