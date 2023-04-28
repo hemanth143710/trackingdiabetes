@@ -1,4 +1,4 @@
-
+<!-- 
 <!DOCTYPE html>
 <html>
 
@@ -49,20 +49,33 @@
 
     <script>
         function submitForm() {
-            const data = {
-                date: document.getElementById('date').value,
-                blood_sugar_am_time: document.getElementById('amTime').value,
-                blood_sugar_am_level: document.getElementById('amLevel').value,
-                breakfast_menu: document.getElementById('breakfastMenu').value,
-                breakfast_time: document.getElementById('breakfastTime').value,
-                lunch_menu: document.getElementById('lunchMenu').value,
-                lunch_time: document.getElementById('lunchTime').value,
-                dinner_menu: document.getElementById('dinnerMenu').value,
-                dinner_time: document.getElementById('dinnerTime').value,
-                blood_sugar_pm_time: document.getElementById('pmTime').value,
-                blood_sugar_pm_level: document.getElementById('pmLevel').value,
-            };
-            console.log(JSON.stringify(data))
+            // const data = {
+            //     date: document.getElementById('date').value,
+            //     blood_sugar_am_time: document.getElementById('amTime').value,
+            //     blood_sugar_am_level: document.getElementById('amLevel').value,
+            //     breakfast_menu: document.getElementById('breakfastMenu').value,
+            //     breakfast_time: document.getElementById('breakfastTime').value,
+            //     lunch_menu: document.getElementById('lunchMenu').value,
+            //     lunch_time: document.getElementById('lunchTime').value,
+            //     dinner_menu: document.getElementById('dinnerMenu').value,
+            //     dinner_time: document.getElementById('dinnerTime').value,
+            //     blood_sugar_pm_time: document.getElementById('pmTime').value,
+            //     blood_sugar_pm_level: document.getElementById('pmLevel').value
+            // };
+            const data =  {
+                    "date": "2023-04-26",
+                    "blood_sugar_am_time": "09:00:00",
+                    "blood_sugar_am_level": 89.0,
+                    "breakfast_menu": "dosa",
+                    "breakfast_time": "09:10:00",
+                    "lunch_menu": "masala wada",
+                    "lunch_time": "12:30:00",
+                    "dinner_menu": "biriyani",
+                    "dinner_time": "19:30:00",
+                    "blood_sugar_pm_time": "20:00:00",
+                    "blood_sugar_pm_level": null
+                }
+                  console.log(JSON.stringify(data))
         fetch("http://127.0.0.1:8000/data/sugarlog/", {
             method: "POST",
             body: JSON.stringify(data),
@@ -96,4 +109,197 @@
     </script>
 </body>
 
-</html>
+</html> -->
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+  <link href="css/register.css" rel="stylesheet" type="text/css">
+
+</head>
+
+<style>
+  .error-message {
+    color: red;
+    margin-top: 20px;
+    margin-left: 10px;
+    text-align: center;
+    font-family: "Poppins", sans-serif;
+  }
+
+  .signup-link a {
+    color: #041858;
+    text-decoration: none;
+  }
+
+  .signup-link a:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<body style="font-family:Poppins, sans-serif;font-weight:400px;">
+  <div class="login" style="border-radius: 35px; margin-top:180px;">
+    <div style="display:flex; align-items:center;margin-left:25px;margin-bottom:-30px;">
+      <img src="images/logo2.jpg" style="width:80px;height:80px;margin-right:10px;">
+      <h1 style="color:#041858;margin-left:10px;">REGISTRATION</h1>
+    </div>
+    <p id="result"></p>
+    <form id="login-form" name="FormFill">
+      <p>date  </p>
+      <label for="date">
+        <i class="fas fa-user-circle"></i>
+      </label>
+      <input type="date" name="date" placeholder="date" id="date" >
+      <br>
+
+      <label for="blood_sugar_am_time">
+        <i class="fa fa-envelope"></i>
+      </label>
+      <input type="time" name="blood_sugar_am_time" placeholder="blood_sugar_am_time" id="blood_sugar_am_time" >
+
+      <label for="blood_sugar_am_level">
+        <i class="fa fa-key"></i>
+      </label>
+      <input type="float" name="blood_sugar_am_level" placeholder="blood_sugar_am_level" id="blood_sugar_am_level" >
+
+      <label for="breakfast_menu">
+        <i class="fa fa-key"></i>
+      </label>
+      <input type="text" name="breakfast_menu" placeholder="breakfast_menu" id="breakfast_menu" >
+
+      <label for="breakfast_time">
+        <i class="fas fa-user-circle"></i>
+      </label>
+      <input type="time" name="breakfast_time" placeholder="breakfast_time" id="breakfast_time" >
+
+      <label for="lunch_menu">
+        <i class="fas fa-user-circle"></i>
+      </label>
+      <input type="text" name="lunch_menu" placeholder="lunch_menu" id="lunch_menu" >
+
+      <label for="lunch_time">
+        <i class="fas fa-user-circle"></i>
+      </label>
+      <input type="time" name="lunch_time" placeholder="lunch_time" id="lunch_time" >
+
+
+
+      
+
+      <p id="registration-message" class="error-message"></p>
+
+      <button type="submit" style="font-size:18px; width:345px; border-radius:10px; margin-bottom:30px;"
+        onclick="registerUser()"><b>SUBMIT</b></button>
+    </form>
+  </div>
+
+  <div class="container">
+    <p style="color:#ffffff;margin-left:-10px;">
+      &copy; <span id="displayYear" style="color:#ffffff;"></span> Deduce Technologies -
+      <a href="index.html" style="color:#ffffff;">All Rights Reserved.</a>
+    </p>
+  </div>
+
+  <script>
+    
+    function registerUser() {
+      const form = document.getElementById('login-form');
+      const errorMessage = document.getElementById('registration-message');
+
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const date = form.elements.date.value;
+        const blood_sugar_am_time = form.elements.blood_sugar_am_time.value;
+        const blood_sugar_am_level = form.elements.blood_sugar_am_level.value;
+        const breakfast_menu = form.elements.breakfast_menu.value;
+        const breakfast_time = form.elements.breakfast_time.value;
+        const lunch_menu = form.elements.lunch_menu.value;
+        const lunch_time = form.elements.lunch_time.value;
+      
+
+        fetch('http://localhost:8000/data/sugarlog/', {
+          method: 'POST',
+          body: JSON.stringify({
+            date: date,
+            blood_sugar_am_time: blood_sugar_am_time,
+            blood_sugar_am_level: blood_sugar_am_level,
+            breakfast_menu: breakfast_menu,
+            breakfast_time: breakfast_time,
+            lunch_menu: lunch_menu,
+            lunch_time: lunch_time,
+            
+          }),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        })
+        .then(response => response.json())
+          .then(data => {
+            console.log(data);
+            if ('error' in data) {
+              // display error message
+              if (data.error ) {
+                errorMessage.innerHTML = data.error;
+              } else if (data.error === 'User with this email already exists.') {
+                errorMessage.innerHTML = 'EMAIL ID ALREADY EXISTS!';
+              } else if (data.error === 'Username must be at least 3 characters') {
+                errorMessage.innerHTML = 'USERNAME MUST BE AT LEAST 3 CHARACTERS!';
+              } else if (data.error === 'Username cannot start with a number') {
+                errorMessage.innerHTML = 'USERNAME CANNOT START WITH A NUMBER';
+              } else if (data.error === 'Passwords length must be greater than 6 characters') {
+                errorMessage.innerHTML = 'PASSWORD LENGTH MUST BE MORE THAN 6 CHARACTERS!';
+              } else if (data.error === 'Passwords do not match') {
+                errorMessage.innerHTML = 'PASSWORDS DO NOT MATCH!';
+              } else if (data.error === 'Username must be less than 12 characters') {
+                errorMessage.innerHTML = 'USERNAME MUST BE LESS THAN 12 CHARACTERS!';  
+              } else if(data.error === 'Enter a valid email address.'){
+                errorMessage.innerHTML = 'ENTER A VALID EMAIL ADDRESS.';
+              }else if(data.error === 'Username cannot contain spaces'){
+                errorMessage.innerHTML = 'USERNAME CANNOT CONTAIN SPACES';
+              }else if(data.error === 'Password cannot contain spaces'){
+                errorMessage.innerHTML = 'PASSWORD CANNOT CONTAIN SPACES';
+              }else if(data.error === 'Enter a valid email address.'){
+                errorMessage.innerHTML = 'ENTER A VALID EMAIL ADDRESS';
+              }else if(data.error === 'This field may not be blank.'){
+                errorMessage.innerHTML = 'THIS FIELD MAY NOT BE BLANK';
+              }else if(data.error === 'User registration failed.'){
+                errorMessage.innerHTML = 'USER REGISTRATION FAILED';
+              }
+              else{
+                errorMessage.innerHTML = 'An unknown error occurred';
+              }
+            } else {
+              // display success message and redirect to login page
+              errorMessage.innerHTML = data.success + ' ' + data.message;
+              //errorMessage.innerHTML = data.message;
+              // setTimeout(function(){
+              //   window.location.href = "login.html"; // replace with actual login page URL
+              // }, 10000); // redirect after 2 seconds (adjust as needed)
+            }
+          })
+          .catch(error => {
+            //errorMessage.innerHTML = '';
+          });
+        });
+      }
+        </script>
+          </body>
+            </html>
+
+
+
+
+
