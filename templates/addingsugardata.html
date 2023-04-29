@@ -134,7 +134,7 @@
   .error-message {
     color: red;
     margin-top: 20px;
-    margin-left: 10px;
+    margin-left: 40px;
     text-align: center;
     font-family: "Poppins", sans-serif;
   }
@@ -147,52 +147,76 @@
   .signup-link a:hover {
     text-decoration: underline;
   }
+  /* Style for the form element */
+form {
+  width: 80%;
+  margin: auto;
+}
+
+/* Style for the label element */
+label {
+  font-size: 1.2rem;
+  display: block;
+  margin-top: 1rem;
+}
+
+/* Style for the input element */
+input {
+  font-size: 1.2rem;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 0.3rem;
+  box-sizing: border-box;
+}
+
+/* Style for the submit button */
+button[type="submit"] {
+  display: block;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
+
 </style>
 
 <body style="font-family:Poppins, sans-serif;font-weight:400px;">
   <div class="login" style="border-radius: 35px; margin-top:180px;">
     <div style="display:flex; align-items:center;margin-left:25px;margin-bottom:-30px;">
-      <img src="images/logo2.jpg" style="width:80px;height:80px;margin-right:10px;">
-      <h1 style="color:#041858;margin-left:10px;">REGISTRATION</h1>
+    
+      <h1 style="color:#041858;margin-left:10px;">ADD LOG</h1>
     </div>
     <p id="result"></p>
     <form id="login-form" name="FormFill">
-      <p>date  </p>
-      <label for="date">
-        <i class="fas fa-user-circle"></i>
-      </label>
+      
       <input type="date" name="date" placeholder="date" id="date" >
-      <br>
-
-      <label for="blood_sugar_am_time">
-        <i class="fa fa-envelope"></i>
-      </label>
-      <input type="time" name="blood_sugar_am_time" placeholder="blood_sugar_am_time" id="blood_sugar_am_time" >
-
-      <label for="blood_sugar_am_level">
-        <i class="fa fa-key"></i>
-      </label>
+  
       <input type="float" name="blood_sugar_am_level" placeholder="blood_sugar_am_level" id="blood_sugar_am_level" >
 
-      <label for="breakfast_menu">
-        <i class="fa fa-key"></i>
-      </label>
+      <input type="time" name="blood_sugar_am_time" placeholder="blood_sugar_am_time" id="blood_sugar_am_time" >
+
       <input type="text" name="breakfast_menu" placeholder="breakfast_menu" id="breakfast_menu" >
 
-      <label for="breakfast_time">
-        <i class="fas fa-user-circle"></i>
-      </label>
       <input type="time" name="breakfast_time" placeholder="breakfast_time" id="breakfast_time" >
 
-      <label for="lunch_menu">
-        <i class="fas fa-user-circle"></i>
-      </label>
       <input type="text" name="lunch_menu" placeholder="lunch_menu" id="lunch_menu" >
 
-      <label for="lunch_time">
-        <i class="fas fa-user-circle"></i>
-      </label>
       <input type="time" name="lunch_time" placeholder="lunch_time" id="lunch_time" >
+
+      <input type="text" name="dinner_menu" placeholder="dinner_menu" id="dinner_menu" >
+
+      <input type="time" name="dinner_time" placeholder="dinner_time" id="dinner_time" >
+   
+      <input type="float" name="blood_sugar_pm_level" placeholder="blood_sugar_pm_level" id="blood_sugar_pm_level" >
+
+      <input type="time" name="blood_sugar_pm_time" placeholder="blood_sugar_pm_time" id="blood_sugar_pm_time" >
+
 
 
 
@@ -228,6 +252,12 @@
         const breakfast_time = form.elements.breakfast_time.value;
         const lunch_menu = form.elements.lunch_menu.value;
         const lunch_time = form.elements.lunch_time.value;
+        const dinner_menu = form.elements.dinner_menu.value;
+        const dinner_time = form.elements.dinner_time.value;
+        const blood_sugar_pm_time = form.elements.blood_sugar_pm_time.value;
+        const blood_sugar_pm_level = form.elements.blood_sugar_pm_level.value;
+        
+
       
 
         fetch('http://localhost:8000/data/sugarlog/', {
@@ -240,6 +270,12 @@
             breakfast_time: breakfast_time,
             lunch_menu: lunch_menu,
             lunch_time: lunch_time,
+            dinner_menu: dinner_menu,
+            dinner_time:dinner_time,
+            blood_sugar_pm_time:blood_sugar_pm_time,
+            blood_sugar_pm_level:blood_sugar_pm_level
+
+
             
           }),
           headers: {
@@ -284,9 +320,9 @@
             } else {
               // display success message and redirect to login page
               errorMessage.innerHTML = data.success + ' ' + data.message;
-              //errorMessage.innerHTML = data.message;
+              errorMessage.innerHTML = data.message;
               // setTimeout(function(){
-              //   window.location.href = "login.html"; // replace with actual login page URL
+              //   window.location.href = "sugardata.html"; // replace with actual login page URL
               // }, 10000); // redirect after 2 seconds (adjust as needed)
             }
           })

@@ -76,7 +76,7 @@
 			const confirmPassword = form.password2.value;
       const token = localStorage.getItem('access_token');
       console.log(confirmPassword)
-      fetch('http://10.10.7.126:200/account/change-password/', {
+      fetch('http://127.0.0.1:8000/account/change-password/', {
         method: 'POST',
         body: JSON.stringify({
           current_password: currentPassword,
@@ -105,7 +105,7 @@
           } else {
             errorMessage.innerHTML = data.Message;
             setTimeout(function () {
-            window.location.href = 'account.html';
+            window.location.href = 'login.html';
             }, 4000);
           }
         })

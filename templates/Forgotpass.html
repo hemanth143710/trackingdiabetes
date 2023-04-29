@@ -74,7 +74,7 @@
           const password = form.elements.password.value;
           const password2 = form.elements.password2.value;
         
-          fetch('http://10.10.7.126:200/account/password-reset/', {
+          fetch('http://127.0.0.1:8000/account/password-reset/', {
             method: 'PATCH',
             body: JSON.stringify({
 
@@ -89,17 +89,20 @@
           })
           .then(response => response.json())
   .then(data => {
-    if ('error' in data) {
-      if (data.error === 'Password must be at least 7 characters') {
+    if ('Error' in data) {
+      console.log(data)
+      if (data.Error === 'Password must be at least 7 characters') {
         errorMessage.innerHTML = 'PASSWORD MUST BE AT LEAST 7 CHARACTERS';
-      } else if (data.error === 'Passwords do not match') {
+      } else if (data.Error === 'Passwords do not match') {
         errorMessage.innerHTML = 'PASSWORDS DO NOT MATCH';
-      } else if (data.error === 'The Reset Token is Invalid!') {
+      } else if (data.Error === 'The Reset Token is Invalid!') {
         errorMessage.innerHTML = 'THE RESET TOKEN IS INVALID!';
       } else {
         errorMessage.innerHTML = 'An error occurred. Please try again later.';
+        // errorMessage.innerHTML = ;
       }
     } else {
+      console.log('else',data)
       errorMessage.innerHTML = data.Message;
       setTimeout(function() {
         window.location.href = 'login.html';

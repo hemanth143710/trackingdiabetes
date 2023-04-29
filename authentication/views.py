@@ -18,6 +18,8 @@ from rest_framework.exceptions import Throttled
 # from .serializers import UserCreateSerializer
 
 from .throttle import UserLoginRateThrottle
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import serializers
 
 class RegisterView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -200,6 +202,132 @@ class LoginAPIView(generics.GenericAPIView):
         })
 
     
+
+from .serializers import ResetPasswordEmailRequestSerializer,SetNewPasswordSerializer,ChangePasswordAfterLoginSerializer
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.utils.encoding import smart_str, force_str, smart_bytes, DjangoUnicodeDecodeError
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.sites.shortcuts import get_current_site
+from django.urls import reverse
+from .utils import Util
+from django.shortcuts import redirect
+class RequestPasswordResetEmail(generics.GenericAPIView):
+    serializer_class = ResetPasswordEmailRequestSerializer
+
+    def post(self, request):
+        try:
+            serializer = self.serializer_class(data = request.data)
+
+            email = request.data['email'].lower()
+        except KeyError:
+            return Response({'Error':'Email Field is Requried!'})
+
+        if User.objects.filter(email=email).exists():
+                user = User.objects.get(email = email)
+                uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
+                token = PasswordResetTokenGenerator().make_token(user)
+                current_site = get_current_site(request = request).domain
+                relative_link = reverse('password-reset-confirm', kwargs = {'uidb64':uidb64, 'token':token})
+                absurl = "http://"+current_site+relative_link
+                email_body = "Hello, " + user.username+","+"\nUse This Link Below To Reset Your Password \n"+ absurl
+                data={'email_body':email_body,'to_email':user.email,'email_subject':'Reset your Password'}
+
+                Util.send_email(data)
+
+        else:
+            return Response({'error':'The Email Id You have Entered is Incorrect!'})
+        return Response({"success":"we have a sent you a link to reset your password!"}, status = status.HTTP_200_OK)
+
+    
+class PasswordTokenCheckAPIView(generics.GenericAPIView):
+    def get(self, request, uidb64, token):
+        try:
+            id=smart_str(urlsafe_base64_decode(uidb64))
+            user=User.objects.get(id=id)
+
+            if not PasswordResetTokenGenerator().check_token(user, token):
+                return Response({'error':'Token is not valid, Please Request a new one!'}, status=status.HTTP_401_UNAUTHORIZED)
+
+            # return Response({"success": 'true', 'message':'credentials valid', 'uidb64':uidb64, 'token': token}, status = status.HTTP_200_OK)
+            #return redirect('http://10.10.7.140/deduce_map/seotech-html/Forgotpass.html')
+            return redirect(f'http://127.0.0.1:5500/td2/trackingdiabetes/templates/Forgotpass.html?uidb64={uidb64}&token={token}')
+        except DjangoUnicodeDecodeError as Identifier:
+            return Response({'error':'Link is not valid, Please Request a new one!'}, status=status.HTTP_401_UNAUTHORIZED  )
+        
+#SET NEW PASSWORD VIEW
+class SetNewPasswordAPIView(generics.GenericAPIView):
+    serializer_class = SetNewPasswordSerializer
+
+    def patch(self, request):
+        try:
+            serializer = self.serializer_class(data=request.data)
+            serializer.is_valid(raise_exception=True)
+
+            password = serializer.validated_data['password']
+            password2 = serializer.validated_data['password2']
+            token = serializer.validated_data['token']
+            uidb64 = serializer.validated_data['uidb64']
+        except ValidationError:
+            return Response({'Error':'Password must be at least 7 characters'},status=status.HTTP_400_BAD_REQUEST)
+        
+        id = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(id=id)
+
+        if not user:
+            return Response({'Error':'Invalid Credentials, Please Try Again.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if len(password)<7:
+            return Response({'Error':'Password must be at least 7 characters'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if password != password2:
+            return Response({'Error':'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if user.is_active == False:
+            return Response({'Error':'Account is Disabled, Please Contact Our Team!'}, status=status.HTTP_400_BAD_REQUEST)
+        
+
+        if not PasswordResetTokenGenerator().check_token(user, token):
+            return Response({'Error':'The Reset Token is Invalid!'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(password)
+        user.save()
+
+        return Response({'success':'true', 'Message':'Password Reset Successfull'})
+    
+class ChangePasswordAfterLoginView(generics.GenericAPIView):
+    serializer_class = ChangePasswordAfterLoginSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError as e:
+            error_dict = e.detail
+            error_message = {}
+            for field, errors in error_dict.items():
+                error_message[field] = errors[0]
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
+
+        password = serializer.validated_data['password']
+        password2 = serializer.validated_data['password2']
+        if password != password2:
+            return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        self.change_password(serializer.validated_data['password'])
+        #return Response({'success': True, 'message': 'Password changed successfully'})
+        return Response({'success':'true', 'Message':'Password Changed Successfully'}, status=status.HTTP_200_OK)
+    
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return self.serializer_class
+        return None
+
+    def change_password(self, password):
+        user = self.request.user
+        user.set_password(password)
+        user.save()
 
 
        

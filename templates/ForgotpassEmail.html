@@ -65,7 +65,7 @@
     
           const email = form.elements.email.value;
       
-          fetch('http://10.10.7.126:200/account/request-reset-email/', {
+          fetch('http://127.0.0.1:8000/account/request-reset-email/', {
             method: 'POST',
             body: JSON.stringify({
               email: email,
@@ -92,7 +92,7 @@
                 errorMessage.innerHTML = data.message;
               }
               setTimeout(function() {
-                window.location.href = 'index.html'; // replace with actual login page URL
+                window.location.href = 'login.html'; // replace with actual login page URL
               }, 4000); // redirect after 2 seconds (adjust as needed)
             }
           })

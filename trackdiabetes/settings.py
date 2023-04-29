@@ -166,7 +166,16 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '500/minute',
         'user': '1000/minute',
-        'loginAttempts': '3/hr',
+        'loginAttempts': '1/hr',
 
-    }
+    },
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587   
+EMAIL_HOST_USER = "testsender810@gmail.com"
+EMAIL_HOST_PASSWORD = "jvgti vyofi gohfod"
