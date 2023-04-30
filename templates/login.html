@@ -62,6 +62,26 @@
               <i class="fa fa-envelope"></i>
             <input type="password" placeholder="Password" id="password" name="password" required>
             </div>
+
+            <div class="field"> 
+              <i class="fas fa-user-circle"></i>
+            <input type="text" placeholder="What is the name of a college you applied to but didn’t attend?" id="second_password_answer_1" name="second_password_answer_1" required>
+            </div>
+            <div class="field"> 
+              <i class="fas fa-user-circle"></i>
+            <input type="text" placeholder="What was the name of the first school you remember attending?" id="second_password_answer_2" name="second_password_answer_2" required>
+            </div>
+            <div class="field"> 
+              <i class="fas fa-user-circle"></i>
+            <input type="text" placeholder="What was your math’s teacher's surname in your 8th year of school?" id="second_password_answer_3" name="second_password_answer_3" required>
+            </div>
+
+            <div class="title-text">
+              <div style="display:flex; align-items:center;margin-left:25px;margin-bottom:-10px;">
+                <!-- <img src="images/logo2.png" style="width:80px;height:80px;margin-right:10px;" > -->
+                <div class="title login" style="color:#041858; margin-left:15px;"><b></b> </div>
+              </div>        
+            </div>
                               
              <div class="pass-link" style="margin-top:10px;"> 
             <a href="ForgotpassEmail.html">Forgot password?</a>
@@ -107,6 +127,10 @@
                     event.preventDefault(); 
                     const email = form.elements.email.value;
                     const password = form.elements.password.value;
+                    const second_password_answer_1 = form.elements.second_password_answer_1.value;
+                    const second_password_answer_2 = form.elements.second_password_answer_2.value;
+                    const second_password_answer_3 = form.elements.second_password_answer_3.value;
+                    
                     const recaptcha = grecaptcha.getResponse();
                     
                     fetch('http://127.0.0.1:8000/account/login/', {
@@ -115,6 +139,9 @@
                  
                         email:email,
                         password: password,
+                        second_password_answer_1:second_password_answer_1,
+                        second_password_answer_2:second_password_answer_2,
+                        second_password_answer_3:second_password_answer_3,
                         recaptcha: recaptcha,
                       }),
                       headers: {
@@ -141,7 +168,7 @@
 
                         }else {
                           const errorMessage = document.getElementById('registration-message');
-                          errorMessage.innerHTML = 'An error occurred. Please try again later.';
+                          errorMessage.innerHTML = data.error;
                         }
                       } else {
                         localStorage.setItem('refresh_token', data.tokens.refresh);

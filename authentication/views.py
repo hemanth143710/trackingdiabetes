@@ -37,12 +37,35 @@ class RegisterView(generics.GenericAPIView):
 
         validated_data = serializer.validated_data
 
+         # check if the required fields are provided
+        if not validated_data['second_password_question_1']:
+            return Response({'error': 'Second password question 1 is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not validated_data['second_password_answer_1']:
+            return Response({'error': 'Second password answer 1 is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not validated_data['second_password_question_2']:
+            return Response({'error': 'Second password question 1 is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not validated_data['second_password_answer_2']:
+            return Response({'error': 'Second password answer 1 is required.'}, status=status.HTTP_400_BAD_REQUEST)
+        if not validated_data['second_password_question_3']:
+            return Response({'error': 'Second password question 1 is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not validated_data['second_password_answer_3']:
+            return Response({'error': 'Second password answer 1 is required.'}, status=status.HTTP_400_BAD_REQUEST)
+
         username = validated_data['username']
         password = validated_data['password']
         email = validated_data['email'].lower()
         full_name = validated_data['full_name']
         phone_number = validated_data['phone_number']
         date_of_birth = validated_data['date_of_birth']
+        second_password_question_1 = validated_data.get('second_password_question_1')
+        second_password_answer_1 = validated_data.get('second_password_answer_1')
+        second_password_question_2 = validated_data.get('second_password_question_2')
+        second_password_answer_2 = validated_data.get('second_password_answer_2')
+        second_password_question_3 = validated_data.get('second_password_question_3')
+        second_password_answer_3 = validated_data.get('second_password_answer_3')
 
         if User.objects.filter(username=username).exists():
             return Response({'error': 'Username already exists'}, status=status.HTTP_400_BAD_REQUEST)
@@ -76,8 +99,16 @@ class RegisterView(generics.GenericAPIView):
         if password != validated_data['password2']:
             return Response({'error': 'Passwords do not match'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = User.objects.create_user(email=email, username=username, password=password, full_name=full_name, phone_number=phone_number, date_of_birth=date_of_birth)
-
+        #user = User.objects.create_user(email=email, username=username, password=password, full_name=full_name, phone_number=phone_number, date_of_birth=date_of_birth)
+        user = User.objects.create_user(email=email, username=username, password=password, full_name=full_name,
+                                phone_number=phone_number, date_of_birth=date_of_birth,
+                                second_password_question_1=second_password_question_1,
+                                second_password_answer_1=second_password_answer_1,
+                                second_password_question_2=second_password_question_2,
+                                second_password_answer_2=second_password_answer_2,
+                                second_password_question_3=second_password_question_3,
+                                second_password_answer_3=second_password_answer_3)
+        
         return Response({'details':'Account Created Successfully.'}, status=status.HTTP_201_CREATED)
     def throttled(self, request, wait):
         raise Throttled(detail={
@@ -162,6 +193,45 @@ def demo_recaptcha(request):
         
 #         return Response({'details':'Account Created Successfully.'}, status=status.HTTP_201_CREATED)
     
+# class LoginAPIView(generics.GenericAPIView):
+#     serializer_class = LoginSerializer
+#     permission_classes = [AllowAny]
+#     throttle_classes = (UserLoginRateThrottle,)
+
+#     def post(self, request, *args, **kwargs):
+        
+#         try:
+#             serializer = self.get_serializer(data=request.data)
+#             serializer.is_valid(raise_exception=True)
+#             validated_data = serializer.validated_data
+#             email = validated_data['email'].lower()
+#             password = validated_data['password']
+#         except ValidationError as e:
+#             return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        
+#         user = auth.authenticate(email=email, password=password)
+
+
+#         if not user:
+#             return Response({'error': 'Email or Password is Incorrect, Please Try Again.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+#         if not user.is_active:
+#             return Response({'error': 'Account is Disabled, Contact Admin!'}, status=status.HTTP_400_BAD_REQUEST)
+                
+#         # refresh = RefreshToken.for_user(user)
+#         # return Response({'username':str(user.username), 'email':str(user.email),'tokens': {'refresh': str(refresh), 'access': str(refresh.access_token)}}, status=status.HTTP_200_OK) 
+
+#         # Generate geoserver_token using the username field
+#         return Response({
+#             'email': user.email,
+#             'username': user.username,
+#             'tokens': user.tokens(),
+#         })
+#     def throttled(self, request, wait):
+#         raise Throttled(detail={
+#             "error": "recaptcha_required",
+#         })
+
 class LoginAPIView(generics.GenericAPIView):
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
@@ -180,26 +250,87 @@ class LoginAPIView(generics.GenericAPIView):
         
         user = auth.authenticate(email=email, password=password)
 
+        if not user:
+            return Response({'error': 'Email or Password is Incorrect, Please Try Again.'}, status=status.HTTP_400_BAD_REQUEST)
+    
+        if not user.is_active:
+            return Response({'error': 'Account is Disabled, Contact Admin!'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if the user has set security questions
+        if user.second_password_question_1 and user.second_password_question_2 and user.second_password_question_3:
+            # If the user has set security questions, check their answers
+            answers = {
+                'question_1': user.second_password_answer_1,
+                'question_2': user.second_password_answer_2,
+                'question_3': user.second_password_answer_3
+            }
+            
+            provided_answers = {
+                'question_1': validated_data.get('second_password_answer_1', ''),
+                'question_2': validated_data.get('second_password_answer_2', ''),
+                'question_3': validated_data.get('second_password_answer_3', '')
+            }
+            
+            if not all([provided_answers[k] == answers[k] for k in answers]):
+                return Response({'error': 'Incorrect answer to one or more security questions.'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Generate the tokens
+        return Response({
+            'email': user.email,
+            'username': user.username,
+            'tokens': user.tokens(),
+        },status=status.HTTP_200_OK)
+        # refresh = RefreshToken.for_user(user)
+        # return Response({
+        #     'email': user.email,
+        #     'username': user.username,
+        #     'tokens': {'refresh': str(refresh), 'access': str(refresh.access_token)}
+        # }, status=status.HTTP_200_OK) 
+
+    def throttled(self, request, wait):
+        raise Throttled(detail={
+            "error": "recaptcha_required",
+        })
+
+
+from .serializers import SendQAResponseSerializer
+
+class SendQAAPIView(generics.GenericAPIView):
+
+    serializer_class = SendQAResponseSerializer
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            validated_data = serializer.validated_data
+            email = validated_data['email'].lower()
+            password = validated_data['password']
+        except ValidationError as e:
+            return Response({'error': e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user = auth.authenticate(email=email, password=password)
 
         if not user:
             return Response({'error': 'Email or Password is Incorrect, Please Try Again.'}, status=status.HTTP_400_BAD_REQUEST)
     
         if not user.is_active:
             return Response({'error': 'Account is Disabled, Contact Admin!'}, status=status.HTTP_400_BAD_REQUEST)
-                
-        # refresh = RefreshToken.for_user(user)
-        # return Response({'username':str(user.username), 'email':str(user.email),'tokens': {'refresh': str(refresh), 'access': str(refresh.access_token)}}, status=status.HTTP_200_OK) 
+        
+        # check if security questions are already answered
 
-        # Generate geoserver_token using the username field
-        return Response({
+        # if security questions not answered, return questions to frontend
+        serializer = SendQAResponseSerializer({
             'email': user.email,
             'username': user.username,
-            'tokens': user.tokens(),
+            'security_questions': [
+                user.second_password_question_1,
+                user.second_password_question_2,
+                user.second_password_question_3,
+            ]
         })
-    def throttled(self, request, wait):
-        raise Throttled(detail={
-            "error": "recaptcha_required",
-        })
+        return Response(serializer.data)
 
     
 

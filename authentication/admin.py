@@ -16,5 +16,11 @@ class CustomUserAdmin(UserAdmin):
         (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         (('Important dates'), {'fields': ('last_login', 'account_created')}),
     )
+    fieldsets = (
+    (None, {'fields': ('username', 'password')}),
+    (('Personal info'), {'fields': ('email', 'full_name', 'phone_number', 'date_of_birth', 'second_password_question_1', 'second_password_answer_1', 'second_password_question_2', 'second_password_answer_2','second_password_question_3','second_password_answer_3')}),
+    (('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+    (('Important dates'), {'fields': ('last_login', 'account_created')}),
+)
 
 admin.site.register(User, CustomUserAdmin)

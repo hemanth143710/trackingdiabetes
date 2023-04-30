@@ -8,7 +8,12 @@
   <title>Sign Up</title>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
   <link href="css/register.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 </head>
 
@@ -29,6 +34,63 @@
   .signup-link a:hover {
     text-decoration: underline;
   }
+
+
+  /* Center the form */
+
+
+
+
+
+
+
+/* Style the error message */
+.error-message {
+  color: #ff0000;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+/* Style the selected items */
+#myDropdown {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+#selectedItems {
+  margin-top: 10px;
+}
+
+#newItemInput {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  margin-right: 10px;
+}
+
+#addNewItemButton {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+
+
+
 </style>
 
 <body style="font-family:Poppins, sans-serif;font-weight:400px;">
@@ -74,6 +136,24 @@
       </label>
       <input type="date" name="date_of_birth" placeholder="date_of_birth" id="date_of_birth" required>
 
+
+      <select id="myDropdown">
+        <option value="">-- Select an question --</option>
+        <option value="What is the name of a college you applied to but didn’t attend?">What is the name of a college you applied to but didn’t attend?</option>
+        <option value="What was the name of the first school you remember attending?">What was the name of the first school you remember attending?</option>
+        <option value="What was your math’s teacher's surname in your 8th year of school?">What was your math’s teacher's surname in your 8th year of school?</option>
+        <option value="What was the name of your first stuffed toy?">What was the name of your first stuffed toy?</option>
+        <option value="What was your driving instructor's first name?">What was your driving instructor's first name?</option>
+      </select>
+      
+      <div id="selectedItems"></div>
+      <input id="newItemInput" type="text" placeholder="Add new item">
+      <button id="addNewItemButton">Add Item</button>
+
+      <br>
+      
+      
+      
       <div class="g-recaptcha" data-sitekey="6Lc7sr0lAAAAAPAa0vtLWVCy7eIqmTDTNemrDkQr" data-callback="correctCaptcha">
       </div>
 
@@ -97,6 +177,62 @@
   </div>
 
   <script>
+
+const dropdown = document.getElementById("myDropdown");
+const selectedItemsDiv = document.getElementById("selectedItems");
+const newItemInput = document.getElementById("newItemInput");
+const addNewItemButton = document.getElementById("addNewItemButton");
+const submitButton = document.getElementById("submitButton");
+const registerUrl = "http://127.0.0.1:8000/account/register/";
+
+let selections = 0;
+
+dropdown.addEventListener("change", function() {
+  if (selections >= 3) {
+    alert("Selection limit reached.");
+    dropdown.selectedIndex = 0;
+    return;
+  }
+
+  const selectedItem = dropdown.options[dropdown.selectedIndex].value;
+
+  if (selectedItemsDiv.querySelector(`[data-value="${selectedItem}"]`)) {
+    alert("Item already selected.");
+    dropdown.selectedIndex = 0;
+    return;
+  }
+
+  const newDiv = document.createElement("div");
+  newDiv.textContent = selectedItem + ": ";
+
+  const newInput = document.createElement("input");
+  newInput.type = "text";
+  newDiv.appendChild(newInput);
+
+  selectedItemsDiv.appendChild(newDiv);
+
+  dropdown.options[dropdown.selectedIndex].disabled = true;
+  dropdown.selectedIndex = 0;
+
+  selections++;
+});
+
+addNewItemButton.addEventListener("click", function() {
+  const newItemValue = newItemInput.value.trim();
+
+  if (newItemValue !== "" && !Array.from(dropdown.options).some(option => option.value === newItemValue)) {
+    const newOption = document.createElement("option");
+    newOption.value = newItemValue;
+    newOption.textContent = newItemValue;
+    dropdown.appendChild(newOption);
+
+    newItemInput.value = "";
+    dropdown.selectedIndex = dropdown.options.length - 1;
+  }
+});
+
+
+
     var correctCaptcha = function (response) {
     };
     function registerUser() {
@@ -105,6 +241,16 @@
 
       form.addEventListener('submit', (event) => {
         event.preventDefault();
+        const items = selectedItemsDiv.querySelectorAll("div");
+        const data = [];
+
+        for (let i = 0; i < items.length; i++) {
+          const input = items[i].querySelector("input");
+          console.log(input)
+          console.log(input.previousSibling.textContent.trim().slice(0, -1))
+
+          data.push({item: input.previousSibling.textContent.trim().slice(0, -1), value: input.value});
+        }
 
         const username = form.elements.username.value;
         const email = form.elements.email.value;
@@ -113,8 +259,16 @@
         const full_name = form.elements.full_name.value;
         const phone_number = form.elements.phone_number.value;
         const date_of_birth = form.elements.date_of_birth.value;
+        const second_password_question_1 =data[0].item
+        const second_password_answer_1 = data[0].value
+        const second_password_question_2 =data[1].item
+        const second_password_answer_2 = data[1].value
+        const second_password_question_3 =data[2].item
+        const second_password_answer_3 = data[2].value
         const recaptcha = grecaptcha.getResponse();
         console.log('jjjjj', recaptcha)
+        console.log(data)
+        console.log(second_password_answer_1,second_password_question_2)
 
         fetch('http://127.0.0.1:8000/account/register/', {
           method: 'POST',
@@ -126,6 +280,12 @@
             full_name: full_name,
             phone_number: phone_number,
             date_of_birth: date_of_birth,
+            second_password_question_1:second_password_question_1,
+            second_password_answer_1:second_password_answer_1,
+            second_password_question_2:second_password_question_2,
+            second_password_answer_2:second_password_answer_2,
+            second_password_question_3:second_password_question_3,
+            second_password_answer_3:second_password_answer_3,
             recaptcha: recaptcha,
 
           }),
