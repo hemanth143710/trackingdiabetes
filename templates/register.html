@@ -158,17 +158,15 @@
       <br>
       
       <div class="grid">
-
-        <img src="images/image1.jpg" style="width:80px;height:80px;margin-right:10px;">
-        <img src="images/image2.jpg" style="width:80px;height:80px;margin-right:10px;">
-        <img src="images/image3.jpg" style="width:80px;height:80px;margin-right:10px;">
-        <img src="images/image4.jpg" style="width:80px;height:80px;margin-right:10px;">
-        <img src="images/image5.jpg" style="width:80px;height:80px;margin-right:10px;">
-        <img src="images/image6.jpg" style="width:80px;height:80px;margin-right:10px;">
-        <img src="images/image7.jpg" style="width:80px;height:80px;margin-right:10px;">
-        <img src="images/image8.jpg" style="width:80px;height:80px;margin-right:10px;">
-        <img src="images/image9.jpg" style="width:80px;height:80px;margin-right:10px;">
-
+        <img src="images/image1.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+        <img src="images/image2.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+        <img src="images/image3.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+        <img src="images/image4.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+        <img src="images/image5.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+        <img src="images/image6.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+        <img src="images/image7.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+        <img src="images/image8.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+        <img src="images/image9.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
       </div>
       
       <div class="g-recaptcha" data-sitekey="6Lc7sr0lAAAAAPAa0vtLWVCy7eIqmTDTNemrDkQr" data-callback="correctCaptcha">
@@ -194,6 +192,10 @@
   </div>
 
   <script>
+
+function selectImage(img) {
+    console.log(img.src);
+  }
 
 const dropdown = document.getElementById("myDropdown");
 const selectedItemsDiv = document.getElementById("selectedItems");

@@ -83,18 +83,17 @@
             </div>
         
             <div class="grid">
-
-              <img src="images/image1.jpg" style="width:80px;height:80px;margin-right:10px;">
-              <img src="images/image2.jpg" style="width:80px;height:80px;margin-right:10px;">
-              <img src="images/image3.jpg" style="width:80px;height:80px;margin-right:10px;">
-              <img src="images/image4.jpg" style="width:80px;height:80px;margin-right:10px;">
-              <img src="images/image5.jpg" style="width:80px;height:80px;margin-right:10px;">
-              <img src="images/image6.jpg" style="width:80px;height:80px;margin-right:10px;">
-              <img src="images/image7.jpg" style="width:80px;height:80px;margin-right:10px;">
-              <img src="images/image8.jpg" style="width:80px;height:80px;margin-right:10px;">
-              <img src="images/image9.jpg" style="width:80px;height:80px;margin-right:10px;">
-
+              <img src="images/image1.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+              <img src="images/image2.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+              <img src="images/image3.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+              <img src="images/image4.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+              <img src="images/image5.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+              <img src="images/image6.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+              <img src="images/image7.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+              <img src="images/image8.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
+              <img src="images/image9.jpg" style="width:80px;height:80px;margin-right:10px;" onclick="selectImage(this)">
             </div>
+            
             
             <div class="title-text">
               <div style="display:flex; align-items:center;margin-left:25px;margin-bottom:-10px;">
@@ -138,6 +137,9 @@
       </div>
     </section>
     <script>
+      function selectImage(img) {
+    console.log(img.src);
+  }
         var correctCaptcha = function(response) {
       };
       function login() {
