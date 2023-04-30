@@ -36,6 +36,12 @@
     .emailVer a:hover{
       text-decoration: underline;
     }
+    .grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+
   </style> 
   <body style="font-family:Poppins, sans-serif;font-weight:400px;">
           
@@ -75,7 +81,21 @@
               <i class="fas fa-user-circle"></i>
             <input type="text" placeholder="What was your math’s teacher's surname in your 8th year of school?" id="second_password_answer_3" name="second_password_answer_3" required>
             </div>
+        
+            <div class="grid">
 
+              <img src="images/image1.jpg" style="width:80px;height:80px;margin-right:10px;">
+              <img src="images/image2.jpg" style="width:80px;height:80px;margin-right:10px;">
+              <img src="images/image3.jpg" style="width:80px;height:80px;margin-right:10px;">
+              <img src="images/image4.jpg" style="width:80px;height:80px;margin-right:10px;">
+              <img src="images/image5.jpg" style="width:80px;height:80px;margin-right:10px;">
+              <img src="images/image6.jpg" style="width:80px;height:80px;margin-right:10px;">
+              <img src="images/image7.jpg" style="width:80px;height:80px;margin-right:10px;">
+              <img src="images/image8.jpg" style="width:80px;height:80px;margin-right:10px;">
+              <img src="images/image9.jpg" style="width:80px;height:80px;margin-right:10px;">
+
+            </div>
+            
             <div class="title-text">
               <div style="display:flex; align-items:center;margin-left:25px;margin-bottom:-10px;">
                 <!-- <img src="images/logo2.png" style="width:80px;height:80px;margin-right:10px;" > -->
@@ -173,11 +193,9 @@
                       } else {
                         localStorage.setItem('refresh_token', data.tokens.refresh);
                         localStorage.setItem('access_token', data.tokens.access);
-                        localStorage.setItem('Geoserver_Token', data.Geoserver_Token);
                         localStorage.setItem('username',data.username);
                         sessionStorage.setItem('refresh_token', data.tokens.refresh);
                         sessionStorage.setItem('access_token', data.tokens.access);
-                        sessionStorage.setItem('Geoserver_Token', data.Geoserver_Token);
                         sessionStorage.setItem('username', data.username);
                         window.location.href = 'index.html'; 
                       }
